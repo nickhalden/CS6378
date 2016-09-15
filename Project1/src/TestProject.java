@@ -3,6 +3,12 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Objects;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.BlockingQueue;
@@ -19,11 +25,53 @@ public class TestProject {
     // 4) pick the emements
     // whenver a
 
-
-
     public static void main(String[] args) {
 
-        if (args.length==1){
+        if (args.length==2){
+
+            // Read the file
+            String configFile=args[1];
+            Path p2 = Paths.get("src/config.txt");
+            Charset charset = Charset.forName("ISO-8859-1");
+            int numberofnodes=-1;
+            int count=0;
+            HashMap hm=new HashMap<String,String>();
+
+            try {
+                for (String line : Files.readAllLines(p2,charset)) {
+                    if (line.length() !=0){
+                        if (line.toCharArray()[0] != '#'){
+                            if (count==0){
+                                numberofnodes=Integer.parseInt(line);
+                                //count++;
+                            }else {
+                                if (count >=numberofnodes){
+                                    //System.out.println(line);
+                                    hm.put(line,"");
+                                }
+                            }
+                            count++;
+                            //System.out.println(line);
+                        }
+
+                    }
+
+                    }
+//                    for (String part : line.split("\t\t")) {
+//                        System.out.println(part);
+//                    }
+//                }
+
+            }catch (Exception e){
+                System.out.println("File exception"+e);
+            }
+            for (Object key: hm.entrySet()){
+                System.out.println("printing the keys"+key);
+            }
+
+
+
+
             BlockingQueue globalQueue= new LinkedBlockingDeque();
             System.out.println("connection stated on "+args[0]);
             ConnectionOpener con=new ConnectionOpener("localhost",args[0]);
