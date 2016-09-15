@@ -19,13 +19,22 @@ public class TestProject {
     // 4) pick the emements
     // whenver a
 
+
+
     public static void main(String[] args) {
-        BlockingQueue globalQueue= new LinkedBlockingDeque();
-        ConnectionOpener con=new ConnectionOpener("localhost","5000");
-        Thread th1=new Thread(con,"th1");
-        th1.start();
-        //Thread th2=new Thread(new Reciever(globalQueue),"th1");
-        //th1.start();
+
+        if (args.length==1){
+            BlockingQueue globalQueue= new LinkedBlockingDeque();
+            System.out.println("connection stated on "+args[0]);
+            ConnectionOpener con=new ConnectionOpener("localhost",args[0]);
+            Thread th1=new Thread(con,"th1");
+            th1.start();
+            //Thread th2=new Thread(new Reciever(globalQueue),"th1");
+            //th1.start();
+        }else{
+            System.out.println("Please check usage: \n javac <File.java> port");
+        }
+
 
     }
 
