@@ -13,11 +13,11 @@
 #
 # Format is:
 # Identifier	Hostname	Port
-0			dc01		3332
-1			dc33		5678
-2			dc21		5231
-3			dc33		2311
-4			dc22		3124
+0			dc33		3332
+1			dc22		5678
+2			localhost		5231
+3			localhost		2311
+4			localhost		3124
 
 
 # Token path for each node
