@@ -1,4 +1,5 @@
 import java.io.*;
+import java.lang.reflect.Array;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -8,10 +9,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.BlockingQueue;
@@ -20,42 +18,57 @@ import java.util.concurrent.LinkedBlockingDeque;
 /**
  * Created by nxc141130 on 9/11/16.
  */
+
+
 public class TestProject {
-    // this is where the main thread starts
-    // 1) initialize the connecctions
-    // 2) maintain a Synchronous queue
-    // 3) drop the data to the queue ( initially empty) receiving queue.
-    // 4) pick the emements
-    // whenver a
+
+
+    public static void test(){
+        System.out.println("test called");
+    }
+
     private String hostname;
-
-
     TestProject(){
-        //String hostname="";
+        // TODO: 9/18/16
+        // Check the host and assingn it the id
         try {
             InetAddress inetAddr = InetAddress.getLocalHost();
-            hostname = inetAddr.getHostName();
+            this.hostname = inetAddr.getHostName();
         }catch (UnknownHostException e){
             System.exit(0);
+
         }
 
 
+
+    }
+    public static HashMap<Integer,String> abc= new HashMap();
+
+    public static HashMap<Integer, String> getAbc() {
+        return abc;
+    }
+
+    public static void setAbc(HashMap<Integer, String> abc) {
+        TestProject.abc = abc;
     }
 
     public static void main(String[] args) {
-        //Global hasmap each application maintains
 
         TestProject tp=new TestProject();
-        System.out.println("I am "+ tp.hostname );
         HashMap hm=new HashMap<Integer,String>();
+        int myId=Integer.parseInt(args[2]);
+        System.out.println("connection stated on "+args[0]);
+        ConnectionOpener con=new ConnectionOpener("localhost",args[0]);
+        Thread th1=new Thread(con,"th1");
+        th1.start();
 
         //global array for tracking the path
-        ArrayList<String> arl = new ArrayList<String>();
+        ArrayList<Integer> arl = new ArrayList<Integer>();
 
-        if (args.length==2){
+
+        if (args.length==3){
 
             // Read the file
-            String configFile=args[1];
             Path p2 = Paths.get("/Users/nxc141130/IdeaProjects/CS6378/Project1/out/production/Project1/config.txt");
             Charset charset = Charset.forName("ISO-8859-1");
             int numberofnodes=-1;
@@ -69,18 +82,52 @@ public class TestProject {
                                 numberofnodes=Integer.parseInt(line);
                                 //count++;
                             }else {
-                                if (count <=numberofnodes){
-                                    //id for identifying the node
-                                    int id=Integer.parseInt(line.split("\t\t\t")[0]);
-                                    hm.put(id,line.split("\t\t\t")[1]);
-                                }else {
-                                    String ele1=line.split("\t\t\t")[0];
-                                    String ele2=line.split("\t\t\t")[1].trim().trim()
-                                            .replace("(","").replace(")","");
-                                    arl.add(ele1+" ,"+ele2+" ,"+ele1);
+                                if (count <= numberofnodes) {
+                                    //identifies the id of the node
+                                    int id = Integer.parseInt(line.split("\t\t\t")[0]);
+                                    // hashmap for id as key and "machine and port" as the values
+                                    hm.put(id, line.split("\t\t\t")[1]);
+                                } else {
+                                    String ele1 = line.split("\t\t\t\t")[0];
+                                    if (Integer.parseInt(ele1) == myId) {
+                                    String ele2 = line.split("\t\t\t\t")[1].trim().trim()
+                                            .replace("(", "").replace(")", "");
+                                    //creates the route list from the config file
+
+                                    for (String i : ele2.split(", ")) {
+                                        arl.add(Integer.parseInt(i));
+                                    }
+                                    arl.add(myId); // at the end adding my id to as I need want to on the path
+
+                                    boolean initiatorFlag = true; // Determine the inititator
+                                    BlockingQueue queue = new ArrayBlockingQueue(1024);
+
+                                    if (initiatorFlag == true) {
+                                        Tocken myMessage = new Tocken(myId, tp.hostname);
+                                        myMessage.setPathList(arl);
+                                        myMessage.setIndex(0);
+                                        myMessage.setConfMap(hm);
+                                        //Tocken tocken1 = new Tocken(myId, "Nipun");
+                                        try {
+                                            queue.put(myMessage);
+                                        } catch (Exception e) {
+
+                                        }
+                                        Thread th3 = new Thread(new Reader(queue));
+                                        try {
+                                            th3.sleep(5000);
+                                            th3.start();
+                                        } catch (InterruptedException ie) {
+
+                                        }
+
+                                    }
+
                                 }
+                            }
 
                             }
+
                             count++;
                         }
 
@@ -92,35 +139,8 @@ public class TestProject {
             }catch (Exception e){
                 System.out.println("File exception"+e);
             }
-            for (Object key: hm.values()){
-                System.out.println("printing the keys "+key);
-            }
-            for (String element: arl){
-
-                System.out.println(element);
-            }
 
 
-            BlockingQueue globalQueue= new LinkedBlockingDeque();
-            System.out.println("connection stated on "+args[0]);
-            ConnectionOpener con=new ConnectionOpener("localhost",args[0]);
-            Thread th1=new Thread(con,"th1");
-            th1.start();
-            boolean initiatorFlag=true; // Determine the inititator
-            if (initiatorFlag == true){
-                Thread th2=new Thread(new Sender(arl.get(0)),"th2");
-                try{
-                    th2.sleep(5000);
-                    th2.start();
-                }catch (InterruptedException ie){
-
-                }
-
-            }
-
-            //new Thread(new Sender(arl.get(0))).start();
-            //Thread th2=new Thread(new Reciever(globalQueue),"th1");
-            //th1.start();
 
             }else{
             System.out.println("Please check usage: \n javac <File.java> port");
@@ -159,12 +179,6 @@ class ConnectionOpener implements  Runnable{
     @Override
     public void run() {
 
-        //create a thread to process the message on the execution
-        // after creation of sockets keep listesing to the queue for the data
-        //
-        String message= "hello from the server";
-        String message2= "hello from the server";
-        String dummy;
         try{
             Socket open=new Socket();
             ServerSocket serverSock = new ServerSocket(getPort());
@@ -175,24 +189,15 @@ class ConnectionOpener implements  Runnable{
                 Socket sock = serverSock.accept();
                 inStream = new ObjectInputStream(sock.getInputStream());
                 Tocken tocken = (Tocken) inStream.readObject();
-                System.out.println("Object received = " + tocken.getId());
-                //PrintWriter is a bridge between character data and the socket's low-level output stream
+                System.out.println("Object received = " + tocken);
 
                 queue.add(tocken);
                 inStream.close();
-
-                //BufferedReader reader = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-                //The method readLine is blocked until a message is received
-                //dummy = reader.readLine();
-                //reader.close();
-                //System.out.println("Client says:" + dummy);
-                //queue.add(dummy);
                 Reader rea=new Reader(queue);
-                new Thread(rea).start();
-                //BufferedReader reader = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-                //String message3 = reader.readLine();
 
-                //System.out.println("Message from the client connected to: " + message3);
+                Thread tb1=new Thread(rea);
+                tb1.sleep(4000);
+                tb1.start();
                 System.out.println("Client connected to: " + getHost());
 
             }
@@ -201,27 +206,9 @@ class ConnectionOpener implements  Runnable{
         }catch (Exception e){ System.out.println("exception occured "+e);}
     }
 }
-class Reciever implements Runnable {
-    protected BlockingQueue queue = null;
 
-    Reciever(BlockingQueue queue) {
-        this.queue = queue;
-    }
-
-    @Override
-    public void run() {
-        try {
-            queue.put("100");
-            Thread.sleep(1000);
-            queue.put("200");
-            Thread.sleep(1000);
-            queue.put("300");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-}
 class Reader implements Runnable{
+
     protected BlockingQueue queue=null;
     Reader(BlockingQueue queue){
         this.queue=queue;
@@ -229,40 +216,91 @@ class Reader implements Runnable{
     @Override
     public void run() {
         try {
-            System.out.println("from the  second(reader) thread");
-            Tocken a=(Tocken)queue.take();
-            if (a.isComplete()==true){
-                System.exit(0);
-            }else{
-                System.out.println("reader is allying the logic the queue"+a);
+
+
+            Tocken a = (Tocken) queue.take();
+            System.out.println(a.getIndex());
+            System.out.println(a.getPathList().size());
+
+
+
+            if (a.getIndex()<a.getPathList().size()){
+                int sendIndex = a.getIndex();
+                a.setLabel(a.getLabel()+a.randInt(1,11)); //adds the new label to the old label
+                a.setIndex(sendIndex);
+                a.setIndex(++sendIndex);
+
+
+            if (sendIndex >= a.getPathList().size()) {
+                a.setComplete(true);// taken care of this condition in the else statement ---extra//repetition
             }
 
+
+            if (a.isComplete() == true) {
+                //Todo
+                // write the label to the log
+                // send a comlete message to args[4]
+
+                System.exit(0);
+            } else {
+                System.out.println("reader is applying the logic the queue");
+                System.out.println("Element that was put in was " + a.getName());
+            }
+            try {
+
+                //id of machine// array path // path index //
+                //Thread th2 = new Thread(new Sender(" 2,2,2,2,2,2"), "th2");
+                Thread th3 = new Thread(new Sender(a));
+                th3.start();
+
+                //th2.start();
+            } catch (Exception e) {
+
+            }
+
+            }
+            if (a.getIndex()==a.getPathList().size()){
+                // end the process and log the info
+                // System.log the label
+                System.out.println("Finished the sending process "+a.getLabel());
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 }
 
-class Sender implements Runnable{
+class Sender  implements Runnable{
+
     private ObjectInputStream inputStream = null;
     private ObjectOutputStream outputStream = null;
-    Sender(String  initiatorInfo){
 
-        System.out.println("I have to send this info to the next desintation"+ initiatorInfo);
+    ////id of machine// array path // path index //
+    Tocken student ;
 
-
+    Sender(Tocken t){
+        student=t;
+        System.out.print("fetch info from this logical object added "
+                + t.getPathList()+" "+t.getIndex()+" "
+                +t.getLabel()+" "+t.getName());
     }
+
     @Override
     public void run() {
         System.out.println("sender trying to send");
         try {
-            Socket clientSocket = new Socket("127.0.0.1",3333);
+            int sendTo=student.getId();
+            String machine=student.getConfMap().get(0).toString().split("\t")[0];
+            int portTo=Integer.parseInt(student.getConfMap().get(0).toString().split("\t\t")[1]);
+
+
+            Socket clientSocket = new Socket("nxc141130s-MacBook-Pro.local",portTo);
             outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
-            Tocken student = new Tocken(1, "dc33");
+            //Tocken student = new Tocken(1, "dc33");
+
             System.out.println("Object to be written = " + student);
             outputStream.writeObject(student);
             outputStream.close();
-
 
         }catch (ConnectionPendingException cpx){
                 System.out.println(cpx);
@@ -272,12 +310,5 @@ class Sender implements Runnable{
 
     }
 }
-//Message Logic
-// read the message from the client
-// that is written on the outputstream
-// on the receiving queue add
-// start the thread that reads from the quuue
-// that queue calls the message method of the current process to genarte the
-// the random message and add it to the value from the queue.
-// After the build message open the thread(Producer) that start opens a port on the
-// next client and empty's it's sending queue
+
+

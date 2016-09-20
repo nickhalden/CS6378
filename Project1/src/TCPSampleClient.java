@@ -1,5 +1,7 @@
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 public class TCPSampleClient
@@ -27,6 +29,7 @@ public class TCPSampleClient
 
             outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
             Tocken student = new Tocken(1, "Bijoy");
+            student.setLabel(1000);
             System.out.println("Object to be written = " + student);
             outputStream.writeObject(student);
             outputStream.close();
@@ -58,16 +61,48 @@ class Tocken implements Serializable {
     private static final long serialVersionUID = 5950169519310163575L;
     private int id;
     private String name;
-    private int label;
+    private int label=-1;
     private boolean complete;
+    private ArrayList<Integer> pathList;
 
+    private int index;
+    private HashMap confMap=new HashMap<Integer,String>();
+
+    public HashMap getConfMap() {
+        return confMap;
+    }
+
+    public void setConfMap(HashMap confMap) {
+        this.confMap = confMap;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public ArrayList<Integer> getPathList() {
+        return this.pathList;
+    }
+
+    public void setPathList(ArrayList<Integer> gotList) {
+        pathList=new ArrayList<Integer>();
+        for (int i=0;i<gotList.size();i++) {
+            this.pathList.add(gotList.get(i));
+        }
+    }
 
     public Tocken(int id, String name) {
+
         this.id = id;
         this.name = name;
-        this.label=randInt(1,10);
         this.complete=false;
     }
+
+
 
     public void setComplete(boolean complete) {
         this.complete = complete;
@@ -95,9 +130,7 @@ class Tocken implements Serializable {
 
     public  int randInt(int min, int max) {
         Random rand = new Random();
-        int randomNum = rand.nextInt((max - min) + 1) + min;
-        System.out.println("from inside the random int "+randomNum);
-        return randomNum;
+        return rand.nextInt((max - min) + 1) + min;
     }
 
     public boolean equals(Object o) {

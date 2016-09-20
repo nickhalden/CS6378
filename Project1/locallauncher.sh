@@ -41,7 +41,7 @@ cat $CONFIG | sed -e "s/#.*//" | sed -e "/^\s*$/d" |
 		echo $id $host $port 
 
 		#/Users/nxc141130/IdeaProjects/CS6378/Project1/out/production/Project1
-		#java -cp out/production/Project1/ TestProject $port config.txt &
+		java -cp out/production/Project1/ TestProject $port config.txt $id &
 		#java -cp  $PROJDIR/out/production/Project1 TestProject  $PROJDIR/out/production/Project1/config.txt $port  &
         n=$(( n + 1 ))
 	else 
