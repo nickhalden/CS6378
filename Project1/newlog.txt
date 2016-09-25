@@ -1,0 +1,210 @@
+done compiling
+5
+0 localhost 3332
+1 localhost 5678
+2 localhost 5231
+3 localhost 2311
+4 localhost 3124
+0 (1, 2, 3, 4)
+1 (3, 2, 4)
+2 (1, 2, 3, 4, 0)
+3 (4, 0, 1, 2)
+4 (1, 2, 3, 2, 3, 1)
+connection stated on 5678
+connection stated on 3332
+connection stated on 3124
+connection stated on 5231
+connection stated on 2311
+0
+4
+values0 4
+ value before: -1 added : 1 value after: 0
+reader is applying the logic the queue
+Element that was put in was nxc141130s-MacBook-Pro.local
+sender fetches info from this logical object to be sent 
+ path:[3, 2, 4, 1] 	 next index: 1	 value: 0sender-node name: nxc141130s-MacBook-Pro.locallocalhost
+
+sender trying to send 3332
+Object to be written = Id = 1 ; Name = nxc141130s-MacBook-Pro.local; Label = 0
+0
+7
+values0 7
+ value before: -1 added : 9 value after: 8
+reader is applying the logic the queue
+Element that was put in was nxc141130s-MacBook-Pro.local
+sender fetches info from this logical object to be sent 
+ path:[1, 2, 3, 2, 3, 1, 4] 	 next index: 1	 value: 8sender-node name: nxc141130s-MacBook-Pro.locallocalhost
+
+sender trying to send 3332
+0
+5
+values0 5
+ value before: -1 added : 9 value after: 8
+reader is applying the logic the queue
+Element that was put in was nxc141130s-MacBook-Pro.local
+0
+6
+values0 6
+ value before: -1 added : 10 value after: 9
+reader is applying the logic the queue
+Element that was put in was nxc141130s-MacBook-Pro.local
+sender fetches info from this logical object to be sent 
+ path:[1, 2, 3, 4, 0] 	 next index: 1	 value: 8sender-node name: nxc141130s-MacBook-Pro.localsender fetches info from this logical object to be sent 
+ path:[1, 2, 3, 4, 0, 2] 	 next index: 1	 value: 9sender-node name: nxc141130s-MacBook-Pro.locallocalhost
+
+sender trying to send 3332
+localhost
+
+sender trying to send 3332
+Object to be written = Id = 4 ; Name = nxc141130s-MacBook-Pro.local; Label = 8
+Object to be written = Id = 2 ; Name = nxc141130s-MacBook-Pro.local; Label = 9
+Object to be written = Id = 0 ; Name = nxc141130s-MacBook-Pro.local; Label = 8
+0
+5
+values0 5
+ value before: -1 added : 5 value after: 4
+reader is applying the logic the queue
+Element that was put in was nxc141130s-MacBook-Pro.local
+sender fetches info from this logical object to be sent 
+ path:[4, 0, 1, 2, 3] 	 next index: 1	 value: 4sender-node name: nxc141130s-MacBook-Pro.locallocalhost
+
+sender trying to send 3332
+Object received = Id = 1 ; Name = nxc141130s-MacBook-Pro.local; Label = 0
+Object to be written = Id = 3 ; Name = nxc141130s-MacBook-Pro.local; Label = 4
+Client connected to: localhost
+1
+4
+values1 4
+ value before: 0 added : 8 value after: 8
+reader is applying the logic the queue
+Element that was put in was nxc141130s-MacBook-Pro.local
+sender fetches info from this logical object to be sent 
+ path:[3, 2, 4, 1] 	 next index: 2	 value: 8sender-node name: nxc141130s-MacBook-Pro.localObject received = Id = 4 ; Name = nxc141130s-MacBook-Pro.local; Label = 8
+localhost
+
+sender trying to send 3332
+Object to be written = Id = 1 ; Name = nxc141130s-MacBook-Pro.local; Label = 8
+Client connected to: localhost
+1
+7
+values1 7
+ value before: 8 added : 1 value after: 9
+reader is applying the logic the queue
+Element that was put in was nxc141130s-MacBook-Pro.local
+sender fetches info from this logical object to be sent 
+ path:[1, 2, 3, 2, 3, 1, 4] 	 next index: 2	 value: 9sender-node name: nxc141130s-MacBook-Pro.locallocalhost
+
+sender trying to send 3332
+Object to be written = Id = 4 ; Name = nxc141130s-MacBook-Pro.local; Label = 9
+Object received = Id = 2 ; Name = nxc141130s-MacBook-Pro.local; Label = 9
+Client connected to: localhost
+1
+6
+values1 6
+ value before: 9 added : 4 value after: 13
+reader is applying the logic the queue
+Element that was put in was nxc141130s-MacBook-Pro.local
+sender fetches info from this logical object to be sent 
+ path:[1, 2, 3, 4, 0, 2] 	 next index: 2	 value: 13sender-node name: nxc141130s-MacBook-Pro.locallocalhost
+
+sender trying to send 3332
+Object to be written = Id = 2 ; Name = nxc141130s-MacBook-Pro.local; Label = 13
+Object received = Id = 0 ; Name = nxc141130s-MacBook-Pro.local; Label = 8
+Client connected to: localhost
+1
+5
+values1 5
+ value before: 8 added : 1 value after: 9
+reader is applying the logic the queue
+Element that was put in was nxc141130s-MacBook-Pro.local
+sender fetches info from this logical object to be sent 
+ path:[1, 2, 3, 4, 0] 	 next index: 2	 value: 9sender-node name: nxc141130s-MacBook-Pro.locallocalhost
+
+sender trying to send 3332
+Object to be written = Id = 0 ; Name = nxc141130s-MacBook-Pro.local; Label = 9
+Object received = Id = 3 ; Name = nxc141130s-MacBook-Pro.local; Label = 4
+Client connected to: localhost
+1
+5
+values1 5
+ value before: 4 added : 4 value after: 8
+reader is applying the logic the queue
+Element that was put in was nxc141130s-MacBook-Pro.local
+sender fetches info from this logical object to be sent 
+ path:[4, 0, 1, 2, 3] 	 next index: 2	 value: 8sender-node name: nxc141130s-MacBook-Pro.locallocalhost
+
+sender trying to send 3332
+Object to be written = Id = 3 ; Name = nxc141130s-MacBook-Pro.local; Label = 8
+Object received = Id = 1 ; Name = nxc141130s-MacBook-Pro.local; Label = 8
+Client connected to: localhost
+2
+4
+values2 4
+ value before: 8 added : 7 value after: 15
+reader is applying the logic the queue
+Element that was put in was nxc141130s-MacBook-Pro.local
+sender fetches info from this logical object to be sent 
+ path:[3, 2, 4, 1] 	 next index: 3	 value: 15sender-node name: nxc141130s-MacBook-Pro.local
+Finished the sending process label:15
+localhost
+
+sender trying to send 3332
+Object to be written = Id = 1 ; Name = nxc141130s-MacBook-Pro.local; Label = 15
+Object received = Id = 4 ; Name = nxc141130s-MacBook-Pro.local; Label = 9
+Client connected to: localhost
+2
+7
+values2 7
+ value before: 9 added : 3 value after: 12
+reader is applying the logic the queue
+Element that was put in was nxc141130s-MacBook-Pro.local
+sender fetches info from this logical object to be sent 
+ path:[1, 2, 3, 2, 3, 1, 4] 	 next index: 3	 value: 12sender-node name: nxc141130s-MacBook-Pro.locallocalhost
+
+sender trying to send 3332
+Object received = Id = 2 ; Name = nxc141130s-MacBook-Pro.local; Label = 13
+Object to be written = Id = 4 ; Name = nxc141130s-MacBook-Pro.local; Label = 12
+Client connected to: localhost
+2
+6
+values2 6
+ value before: 13 added : 3 value after: 16
+reader is applying the logic the queue
+Element that was put in was nxc141130s-MacBook-Pro.local
+sender fetches info from this logical object to be sent 
+ path:[1, 2, 3, 4, 0, 2] 	 next index: 3	 value: 16sender-node name: nxc141130s-MacBook-Pro.locallocalhost
+
+sender trying to send 3332
+Object to be written = Id = 2 ; Name = nxc141130s-MacBook-Pro.local; Label = 16
+Object received = Id = 0 ; Name = nxc141130s-MacBook-Pro.local; Label = 9
+Client connected to: localhost
+2
+5
+values2 5
+ value before: 9 added : 8 value after: 17
+reader is applying the logic the queue
+Element that was put in was nxc141130s-MacBook-Pro.local
+sender fetches info from this logical object to be sent 
+ path:[1, 2, 3, 4, 0] 	 next index: 3	 value: 17sender-node name: nxc141130s-MacBook-Pro.locallocalhost
+
+sender trying to send 3332
+Object to be written = Id = 0 ; Name = nxc141130s-MacBook-Pro.local; Label = 17
+Object received = Id = 3 ; Name = nxc141130s-MacBook-Pro.local; Label = 8
+Client connected to: localhost
+2
+5
+values2 5
+ value before: 8 added : 9 value after: 17
+reader is applying the logic the queue
+Element that was put in was nxc141130s-MacBook-Pro.local
+sender fetches info from this logical object to be sent 
+ path:[4, 0, 1, 2, 3] 	 next index: 3	 value: 17sender-node name: nxc141130s-MacBook-Pro.locallocalhost
+
+sender trying to send 3332
+Object to be written = Id = 3 ; Name = nxc141130s-MacBook-Pro.local; Label = 17
+Object received = Id = 1 ; Name = nxc141130s-MacBook-Pro.local; Label = 15
+Client connected to: localhost
+3
+4
+values3 4
+ value before: 15 added : 6 value after: 21

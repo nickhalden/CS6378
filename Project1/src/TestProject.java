@@ -23,9 +23,6 @@ import java.util.concurrent.LinkedBlockingDeque;
 public class TestProject {
 
 
-    public static void test(){
-        System.out.println("test called");
-    }
 
     private String hostname;
     TestProject(){
@@ -63,13 +60,13 @@ public class TestProject {
         th1.start();
 
         //global array for tracking the path
-        ArrayList<Integer> arl = new ArrayList<Integer>();
+        ArrayList<Integer> arl;
 
 
         if (args.length==3){
 
             // Read the file
-            Path p2 = Paths.get("/Users/nxc141130/IdeaProjects/CS6378/Project1/out/production/Project1/config.txt");
+            Path p2 = Paths.get("src/config.txt");
             Charset charset = Charset.forName("ISO-8859-1");
             int numberofnodes=-1;
             int count=0;
@@ -92,8 +89,8 @@ public class TestProject {
                                     if (Integer.parseInt(ele1) == myId) {
                                     String ele2 = line.split("\t\t\t\t")[1].trim().trim()
                                             .replace("(", "").replace(")", "");
-                                    //creates the route list from the config file
-
+                                    //creates the route list from the config fil
+                                        arl= new ArrayList<Integer>();
                                     for (String i : ele2.split(", ")) {
                                         arl.add(Integer.parseInt(i));
                                     }
@@ -105,7 +102,7 @@ public class TestProject {
                                     if (initiatorFlag == true) {
                                         Tocken myMessage = new Tocken(myId, tp.hostname);
                                         myMessage.setPathList(arl);
-                                        myMessage.setIndex(0);
+                                        myMessage.setIndex(-1);
                                         myMessage.setConfMap(hm);
                                         //Tocken tocken1 = new Tocken(myId, "Nipun");
                                         try {
@@ -219,51 +216,61 @@ class Reader implements Runnable{
 
 
             Tocken a = (Tocken) queue.take();
-            System.out.println(a.getIndex());
-            System.out.println(a.getPathList().size());
+            System.out.print(" outside if loop : "+ a.getIndex()+" "+a.getPathList().size());
 
+            if (a.getIndex()<a.getPathList().size()-1){
 
-
-            if (a.getIndex()<a.getPathList().size()){
+                System.out.println(" values "+a.getIndex()+" "+a.getPathList().size());
                 int sendIndex = a.getIndex();
-                a.setLabel(a.getLabel()+a.randInt(1,11)); //adds the new label to the old label
+                System.out.print(" value before: "+a.getLabel());
+                int addedValue=a.randInt(1,11);
+                System.out.print(" added : "+addedValue);
+                a.setLabel(a.getLabel()+addedValue); //adds the new label to the old label
+                System.out.println(" value after: "+a.getLabel());
                 a.setIndex(sendIndex);
                 a.setIndex(++sendIndex);
+                try {
+
+                    //id of machine// array path // path index //
+                    //Thread th2 = new Thread(new Sender(" 2,2,2,2,2,2"), "th2");
+                    Thread th3 = new Thread(new Sender(a));
+                    th3.start();
+
+                    //th2.start();
+                } catch (Exception e) {
+                    System.out.println("Caught here :"+e);
+
+                }
+//
+//            if (sendIndex >= a.getPathList().size()) {
+//                a.setComplete(true);// taken care of this condition in the else statement ---extra//repetition
+//            }
 
 
-            if (sendIndex >= a.getPathList().size()) {
-                a.setComplete(true);// taken care of this condition in the else statement ---extra//repetition
+//            if (a.isComplete() == true) {
+//                //Todo
+//                // write the label to the log
+//                // send a comlete message to args[4]
+//
+//                //System.exit(0);
+//            }
+//            else {
+//                System.out.println("reader is applying the logic the queue");
+//                System.out.println("Element that was put in was " + a.getName());
+//            }
+
+
+            } // if for index less than the size finishes
+            else{
+                System.out.println("\n ====== Finished the sending process for " +a.getId()+ " label: "+a.getLabel());
             }
 
-
-            if (a.isComplete() == true) {
-                //Todo
-                // write the label to the log
-                // send a comlete message to args[4]
-
-                System.exit(0);
-            } else {
-                System.out.println("reader is applying the logic the queue");
-                System.out.println("Element that was put in was " + a.getName());
-            }
-            try {
-
-                //id of machine// array path // path index //
-                //Thread th2 = new Thread(new Sender(" 2,2,2,2,2,2"), "th2");
-                Thread th3 = new Thread(new Sender(a));
-                th3.start();
-
-                //th2.start();
-            } catch (Exception e) {
-
-            }
-
-            }
-            if (a.getIndex()==a.getPathList().size()){
-                // end the process and log the info
-                // System.log the label
-                System.out.println("Finished the sending process "+a.getLabel());
-            }
+//             (a.getIndex()>=a.getPathList().size()-1){
+//                // end the process and log the info
+//                // System.log the label
+//                System.out.println("\n ====== Finished the sending process for " +a.getId()+ " label: "+a.getLabel());
+//                //System.exit(333);
+//            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -280,32 +287,32 @@ class Sender  implements Runnable{
 
     Sender(Tocken t){
         student=t;
-        System.out.print("fetch info from this logical object added "
-                + t.getPathList()+" "+t.getIndex()+" "
-                +t.getLabel()+" "+t.getName());
+        System.out.print("sender fetches info from this logical object to be sent "
+                + "\n path:"+t.getPathList()+" \t next index: "+t.getIndex()+"\t value: "
+                +t.getLabel()+" sender-node name: "+t.getName());
     }
 
     @Override
     public void run() {
-        System.out.println("sender trying to send");
         try {
-            int sendTo=student.getId();
-            String machine=student.getConfMap().get(0).toString().split("\t")[0];
-            int portTo=Integer.parseInt(student.getConfMap().get(0).toString().split("\t\t")[1]);
-
-
+            int sendTo=student.getIndex();;
+            Integer sendToThis=student.getPathList().get(sendTo);
+            String machine=student.getConfMap().get(sendToThis).toString().split("\t")[0];
+            int portTo=Integer.parseInt(student.getConfMap().get(sendToThis).toString().split("\t\t")[1]);
+            System.out.println(" machine: "+machine+ "full path is "+student.getPathList()
+                    +" sending on the port "+portTo);
+            //System.exit(99);
             Socket clientSocket = new Socket("nxc141130s-MacBook-Pro.local",portTo);
             outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
             //Tocken student = new Tocken(1, "dc33");
-
             System.out.println("Object to be written = " + student);
             outputStream.writeObject(student);
             outputStream.close();
 
         }catch (ConnectionPendingException cpx){
-                System.out.println(cpx);
+                System.out.println("failed at Connection Pending :"+cpx);
         }catch (IOException io){
-                System.out.println(io);
+                System.out.println("Got an IO exception at sending: "+io);
         }
 
     }

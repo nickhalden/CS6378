@@ -12,7 +12,7 @@ PROJDIR=$HOME/IdeaProjects/CS6378/Project1
 # This assumes your config file is named "config.txt"
 # and is located in your project directory
 #
-CONFIG=$PROJDIR/config.txt
+CONFIG=/Users/nxc141130/IdeaProjects/CS6378/Project1/src/config.txt
 
 #
 # Directory your java classes are in
@@ -27,6 +27,8 @@ PROG=Project1
 n=1
 
 
+javac src/*.java -d test3/
+echo "done compiling"
 cat $CONFIG | sed -e "s/#.*//" | sed -e "/^\s*$/d" |
 (
     read i
@@ -41,7 +43,7 @@ cat $CONFIG | sed -e "s/#.*//" | sed -e "/^\s*$/d" |
 		echo $id $host $port 
 
 		#/Users/nxc141130/IdeaProjects/CS6378/Project1/out/production/Project1
-		java -cp out/production/Project1/ TestProject $port config.txt $id &
+		java -cp test3/ TestProject $port $CONFIG $id &
 		#java -cp  $PROJDIR/out/production/Project1 TestProject  $PROJDIR/out/production/Project1/config.txt $port  &
         n=$(( n + 1 ))
 	else 
