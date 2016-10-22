@@ -18,7 +18,7 @@ import java.util.Queue;
 //    4) A right child
 
 
-public class BinaryTree<E> {
+public class BinaryTree<E extends  Comparable<? super E>> {
 
     //private =null;
     private TreeNode<E> root;
@@ -54,7 +54,20 @@ public class BinaryTree<E> {
         System.out.println(b.getroot().getLeftChild());
 
     }
-
+    public boolean contains(E toFind){
+        TreeNode<E> curr=root;
+        int comp;
+        while (curr!=null){
+            comp=toFind.compareTo(curr.getValue());
+            if (comp>0) {
+                curr= curr.getRightChild();
+            }else if (comp<0){
+                curr= curr.getLeftChild();
+            }else
+                return true;
+        }
+        return false;
+    }
 
 
 
@@ -121,6 +134,11 @@ class TreeNode<E>{
         this.right=null;
     }
 
+    public E getValue() {
+        return value;
+    }
+
+
     public TreeNode<E> getLeftChild() {
         return this.left;
     }
@@ -142,6 +160,7 @@ class TreeNode<E>{
     public void visit(){
         this.visit=true;
     }
+
 
 }
 
